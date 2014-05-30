@@ -23,12 +23,4 @@ class apcu($version = '4.0.4') {
     service_autorestart => true,
     preferred_state     => 'beta',
   }
-
-  exec { 'apcu-install':
-    command => "pecl install apcu-$version",    
-    require => [
-      Package['build-essential'], 
-      Package['libpcre3-dev'],
-    ],
-  }
 }
