@@ -27,6 +27,6 @@ class apcu($version = '4.0.4') {
   php::augeas { 'augeas-apcu':    
     entry  => "PHP/extension[. = \"apcu.so\"]",
     value  => 'apcu.so',
-    notify => 'httpd',
+    notify  => Service['httpd'],
   }  
 }
