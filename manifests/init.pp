@@ -16,18 +16,19 @@
 # This class requires the apache class from PuppetLabs.
 class apcu($version = '4.0.4') {  
 
-  exec { 'apcu-install':
-    command => "pecl install pecl.php.net/apcu-$version",    
-    require => Package['build-essential'],
-  }
+  ensure_packages( ['libpcre3-dev'] )
   
-  exec { 'apcu-prerequisites':
-    command => 'apt-get install libpcre3-dev',
+  php::pecl::module { "apcu-${version}":
+    use_package         => false,
+    service_autorestart => true,
+    preferred_state     => 'beta',
   }
 
-  file { '/etc/php5/apache2/conf.d/apcu.ini':
-    source  => 'puppet:///modules/apcu/apcu.ini',
-    require => [Exec['apcu-install'], Exec['apcu-prerequisites']],
-    notify  => Service['httpd'],    
+  exec { 'apcu-install':
+    command => "pecl install apcu-$version",    
+    require => [
+      Package['build-essential'], 
+      Package['libpcre3-dev'],
+    ],
   }
 }
